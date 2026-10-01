@@ -91,9 +91,123 @@ body {
   display: flex;
   flex-direction: column;
   background: 
-    radial-gradient(circle at 10% 20%, rgba(2, 132, 199, 0.04) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(220, 38, 38, 0.03) 0%, transparent 40%),
-    var(--slate-50);
+    radial-gradient(circle at 15% 15%, rgba(2, 132, 199, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(220, 38, 38, 0.08) 0%, transparent 45%),
+    #0b1120;
+  padding: 24px 20px 48px;
+  align-items: center;
+  transition: padding var(--transition-normal);
+}
+
+body.full-width-mode {
+  padding: 0;
+  background: var(--slate-50);
+}
+
+/* Window Shell Container */
+.window-shell {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  background: var(--slate-50);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 25px 60px -15px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 10px 30px rgba(15, 23, 42, 0.3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: max-width var(--transition-normal), border-radius var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+body.full-width-mode .window-shell {
+  max-width: 100%;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+}
+
+/* Window Chrome Top Titlebar */
+.window-chrome-bar {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  color: var(--slate-400);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  user-select: none;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  z-index: 105;
+}
+
+.window-traffic-lights {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.traffic-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.traffic-dot:hover {
+  transform: scale(1.15);
+}
+.dot-close { background: #ef4444; border: 1px solid #b91c1c; }
+.dot-minimize { background: #f59e0b; border: 1px solid #d97706; }
+.dot-expand { background: #10b981; border: 1px solid #059669; }
+
+.window-chrome-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--slate-300);
+  font-size: 0.8rem;
+}
+
+.pulse-live-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: pulse-dot 1.4s infinite;
+}
+
+.window-chrome-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.window-toggle-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--slate-300);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.window-toggle-btn:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  color: #ffffff;
 }
 
 /* Top Emergency Marquee Bar */

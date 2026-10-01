@@ -18,8 +18,32 @@
 </head>
 <body>
 
-  <!-- Navigation & Emergency Ticker Container -->
-  <div id="navbarContainer"></div>
+  <!-- Windowed Application Shell -->
+  <div class="window-shell" id="appWindowShell">
+
+    <!-- Clinical Workstation Window Titlebar -->
+    <div class="window-chrome-bar" id="windowChromeBar">
+      <div class="window-traffic-lights">
+        <span class="traffic-dot dot-close" title="Close"></span>
+        <span class="traffic-dot dot-minimize" title="Minimize"></span>
+        <span class="traffic-dot dot-expand" id="windowExpandDot" title="Toggle Full Width / Windowed"></span>
+      </div>
+
+      <div class="window-chrome-title">
+        <span class="pulse-live-indicator"></span>
+        <span>PulsePoint Clinical Workstation &mdash; St. Jude Regional Hub [Active]</span>
+      </div>
+
+      <div class="window-chrome-actions">
+        <button class="window-toggle-btn" id="windowSizeToggleBtn" title="Toggle Windowed / Full Width Layout">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+          <span id="windowToggleLabel">Full Width</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation & Emergency Ticker Container -->
+    <div id="navbarContainer"></div>
 
   <!-- Main Content Wrapper -->
   <main class="main-content" id="mainContentArea">
@@ -85,33 +109,35 @@
 
   </main>
 
-  <!-- Global Toast Notification Stack -->
-  <div class="toast-container" id="toastContainer" aria-live="assertive"></div>
+    <!-- Site Footer -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <img src="assets/logo.png" alt="PulsePoint Logo" />
+            <div>
+              <h4>PulsePoint Healthcare Infrastructure</h4>
+              <p style="font-size: 0.8rem; color: var(--slate-400);">Unified Clinical Pharmacy, Lab Scheduling & Blood Supply Pipeline</p>
+            </div>
+          </div>
 
-  <!-- Site Footer -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <img src="assets/logo.png" alt="PulsePoint Logo" />
-          <div>
-            <h4>PulsePoint Healthcare Infrastructure</h4>
-            <p style="font-size: 0.8rem; color: var(--slate-400);">Unified Clinical Pharmacy, Lab Scheduling & Blood Supply Pipeline</p>
+          <div style="display: flex; align-items: center; gap: 20px; font-size: 0.85rem;">
+            <div>🚨 Emergency Trauma Hotline: <strong style="color: #ef4444;">+1 (555) 019-9111</strong></div>
+            <div>❄️ Cold-Chain Dispatch: <strong style="color: #38bdf8;">+1 (555) 019-7000</strong></div>
           </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 20px; font-size: 0.85rem;">
-          <div>🚨 Emergency Trauma Hotline: <strong style="color: #ef4444;">+1 (555) 019-9111</strong></div>
-          <div>❄️ Cold-Chain Dispatch: <strong style="color: #38bdf8;">+1 (555) 019-7000</strong></div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 PulsePoint Medical Systems. Developed for Healthcare Innovation Hackathon.</p>
+          <p>HIPAA & GDPR Architecture &bull; Cryptographically Verified Logistics Tokens &bull; Role-Based Access Control</p>
         </div>
       </div>
+    </footer>
 
-      <div class="footer-bottom">
-        <p>&copy; 2026 PulsePoint Medical Systems. Developed for Healthcare Innovation Hackathon.</p>
-        <p>HIPAA & GDPR Architecture &bull; Cryptographically Verified Logistics Tokens &bull; Role-Based Access Control</p>
-      </div>
-    </div>
-  </footer>
+  </div><!-- /.window-shell -->
+
+  <!-- Global Toast Notification Stack -->
+  <div class="toast-container" id="toastContainer" aria-live="assertive"></div>
 
   <!-- Application Logic Modules -->
   <script type="module" src="js/app.js"></script>
