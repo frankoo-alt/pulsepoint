@@ -1,0 +1,144 @@
+/* ==========================================================================
+   PulsePoint Responsive & Accessibility Adaptations
+   Mobile breakpoints, tablet layouts, touch targets, and print styles
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .hero-card {
+    flex-direction: column;
+    padding: 32px 24px;
+    text-align: center;
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-highlights {
+    justify-content: center;
+  }
+
+  .hero-banner-visual {
+    max-width: 100%;
+  }
+
+  .diagnostic-layout-grid,
+  .donor-layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .blood-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .nav-tabs {
+    overflow-x: auto;
+    width: 100%;
+    justify-content: flex-start;
+    padding-bottom: 6px;
+  }
+
+  .role-control-group {
+    justify-content: space-between;
+  }
+
+  .pharmacy-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .blood-stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .blood-groups-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .section-header-block {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .status-stepper-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .status-stepper-line {
+    display: none;
+  }
+
+  .status-step-node {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .inventory-table-card {
+    overflow-x: auto;
+  }
+
+  .toast-container {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .blood-groups-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-title {
+    font-size: 1.8rem;
+  }
+
+  .chips-group {
+    width: 100%;
+  }
+
+  .filter-chip-btn {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}
+
+/* Print Styles for Digital Booking Pass & Donor Card */
+@media print {
+  .site-header,
+  .emergency-ticker-bar,
+  .site-footer,
+  .toast-container,
+  .search-filter-card,
+  .nav-tabs,
+  .role-control-group,
+  .btn-primary,
+  .btn-danger,
+  .btn-outline {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .digital-booking-pass,
+  .digital-donor-badge-card {
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+    color: #000000 !important;
+    page-break-inside: avoid;
+  }
+}

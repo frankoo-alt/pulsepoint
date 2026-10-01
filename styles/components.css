@@ -1,0 +1,976 @@
+/* ==========================================================================
+   PulsePoint Component-Specific Styles
+   Pharmacy, Diagnostics, Blood Bank, Donor Portal & Hospital Requisitions
+   ========================================================================== */
+
+/* Search & Filter Bar */
+.search-filter-card {
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-icon-svg {
+  position: absolute;
+  left: 16px;
+  color: var(--slate-400);
+  pointer-events: none;
+}
+
+.search-input-field {
+  width: 100%;
+  padding: 14px 18px 14px 48px;
+  font-size: 0.95rem;
+  border: 1.5px solid var(--slate-300);
+  border-radius: var(--radius-md);
+  background: var(--slate-50);
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.search-input-field:focus {
+  background: var(--white);
+  border-color: var(--primary-600);
+  box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15);
+}
+
+.filter-chips-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.chips-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-chip-btn {
+  background: var(--slate-100);
+  border: 1px solid var(--slate-200);
+  color: var(--slate-600);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.filter-chip-btn:hover {
+  background: var(--slate-200);
+  color: var(--slate-900);
+}
+
+.filter-chip-btn.active {
+  background: var(--primary-600);
+  color: var(--white);
+  border-color: var(--primary-600);
+}
+
+.filter-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--slate-700);
+  cursor: pointer;
+}
+
+/* Pharmacy Medicine Cards & Chemist Comparison */
+.pharmacy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 20px;
+}
+
+.medicine-card {
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  position: relative;
+}
+
+.medicine-card:hover {
+  border-color: var(--primary-400);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.medicine-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.medicine-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--slate-900);
+  line-height: 1.25;
+}
+
+.generic-molecule-badge {
+  display: inline-block;
+  font-size: 0.775rem;
+  color: var(--primary-700);
+  background: var(--primary-50);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.medicine-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.775rem;
+  color: var(--slate-600);
+  margin-top: 6px;
+}
+
+.medicine-spec-chip {
+  background: var(--slate-100);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.chemist-info-box {
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chemist-info-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.825rem;
+}
+
+.chemist-name {
+  font-weight: 700;
+  color: var(--slate-800);
+}
+
+.chemist-distance {
+  color: var(--slate-500);
+  font-size: 0.75rem;
+}
+
+.medicine-pricing-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px dashed var(--slate-200);
+}
+
+.price-tag {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--primary-900);
+}
+
+.price-tag small {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--slate-500);
+}
+
+/* Diagnostic Lab Booking Module */
+.diagnostic-layout-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+}
+
+.test-catalog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.test-item-card {
+  background: var(--white);
+  border: 1.5px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.test-item-card:hover {
+  border-color: var(--primary-400);
+  box-shadow: var(--shadow-md);
+}
+
+.test-item-card.selected {
+  border-color: var(--primary-600);
+  background: var(--primary-50);
+  box-shadow: 0 0 0 2px var(--primary-600);
+}
+
+.test-item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.test-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--slate-900);
+}
+
+.test-code-badge {
+  background: var(--slate-100);
+  color: var(--slate-700);
+  font-size: 0.725rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.test-desc {
+  font-size: 0.85rem;
+  color: var(--slate-600);
+  line-height: 1.45;
+}
+
+.test-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.775rem;
+  color: var(--slate-700);
+}
+
+.test-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.booking-panel-card {
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.booking-panel-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--slate-900);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.selected-test-summary-box {
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+
+/* Calendar Date Chips Bar */
+.calendar-chips-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+.date-chip {
+  flex-shrink: 0;
+  width: 68px;
+  padding: 10px 4px;
+  text-align: center;
+  background: var(--slate-50);
+  border: 1.5px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.date-chip:hover {
+  border-color: var(--primary-400);
+}
+
+.date-chip.active {
+  background: var(--primary-600);
+  border-color: var(--primary-600);
+  color: var(--white);
+}
+
+.date-chip-day {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.date-chip-num {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+/* Slot Time Period Chips */
+.slot-section-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slot-period-label {
+  font-size: 0.775rem;
+  font-weight: 700;
+  color: var(--slate-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.slot-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.time-slot-btn {
+  background: var(--white);
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--slate-800);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  text-align: center;
+}
+
+.time-slot-btn:hover {
+  border-color: var(--primary-500);
+  color: var(--primary-700);
+}
+
+.time-slot-btn.active {
+  background: var(--primary-700);
+  border-color: var(--primary-700);
+  color: var(--white);
+}
+
+/* Patient Booking Form Inputs */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: var(--slate-700);
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 0.875rem;
+  border: 1.5px solid var(--slate-300);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--primary-600);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+/* Digital Booking Pass Preview */
+.digital-booking-pass {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+  border: 2px dashed var(--success-600);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pass-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--slate-200);
+  padding-bottom: 10px;
+}
+
+.pass-ref-badge {
+  font-family: monospace;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--success-700);
+}
+
+/* Public Blood Availability Dashboard */
+.blood-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.blood-stat-card {
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.blood-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.blood-stat-info strong {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--slate-900);
+  line-height: 1;
+  display: block;
+}
+
+.blood-stat-info span {
+  font-size: 0.8rem;
+  color: var(--slate-500);
+  font-weight: 500;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Blood Group Cards Grid */
+.blood-groups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.blood-group-card {
+  background: var(--white);
+  border: 1.5px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.blood-group-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-400);
+}
+
+.blood-group-card.critical-stock {
+  border-color: var(--blood-500);
+  background: linear-gradient(180deg, #fff5f5 0%, #ffffff 100%);
+}
+
+.blood-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.blood-group-symbol {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--blood-600);
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.blood-group-card.critical-stock .blood-group-symbol {
+  color: var(--blood-700);
+  animation: gentle-pulse 2s infinite ease-in-out;
+}
+
+@keyframes gentle-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+.blood-supply-gauge {
+  width: 100%;
+  height: 8px;
+  background: var(--slate-100);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.blood-supply-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.6s ease;
+}
+
+.blood-supply-fill.fill-optimal { background: var(--success-600); }
+.blood-supply-fill.fill-moderate { background: var(--primary-600); }
+.blood-supply-fill.fill-low { background: var(--warning-600); }
+.blood-supply-fill.fill-critical { background: var(--blood-600); }
+
+.blood-card-details {
+  font-size: 0.8rem;
+  color: var(--slate-600);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Compatibility Matrix Table */
+.compatibility-container {
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 32px;
+}
+
+.compat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-top: 16px;
+}
+
+.compat-table th, .compat-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.compat-table th {
+  background: var(--slate-50);
+  color: var(--slate-700);
+  font-weight: 700;
+}
+
+.compat-pill {
+  display: inline-block;
+  background: var(--primary-50);
+  border: 1px solid var(--primary-200);
+  color: var(--primary-800);
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  margin: 2px;
+}
+
+/* Voluntary Donor Portal & Digital Card */
+.donor-layout-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 28px;
+}
+
+.donor-registration-card {
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+}
+
+.digital-donor-badge-card {
+  background: linear-gradient(135deg, #0a2540 0%, #1e3a8a 100%);
+  color: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  box-shadow: 0 15px 30px rgba(10, 37, 64, 0.35);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.digital-donor-badge-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(220, 38, 38, 0.25) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.donor-badge-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.donor-id-code {
+  font-family: monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  color: #93c5fd;
+}
+
+.donor-badge-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.donor-name-large {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.donor-blood-callout {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #ef4444;
+  line-height: 1;
+  text-shadow: 0 2px 10px rgba(239, 68, 68, 0.5);
+}
+
+.donor-badge-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 14px;
+  font-size: 0.775rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Simulated Emergency Alerts Feed */
+.emergency-alert-card {
+  background: var(--white);
+  border: 1.5px solid var(--blood-500);
+  border-left: 6px solid var(--blood-600);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.12);
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.alert-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.alert-hospital-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--slate-900);
+}
+
+.alert-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px dashed var(--slate-200);
+}
+
+/* Hospital & Blood Bank Admin (Restricted View) */
+.admin-lock-prompt {
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-xl);
+  padding: 40px;
+  max-width: 540px;
+  margin: 40px auto;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-lock-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary-50);
+  color: var(--primary-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto 16px;
+}
+
+.admin-dashboard-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 2px solid var(--slate-200);
+  margin-bottom: 24px;
+}
+
+.admin-subtab-btn {
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--slate-600);
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.admin-subtab-btn.active {
+  color: var(--primary-700);
+  border-bottom-color: var(--primary-700);
+}
+
+/* Cold-Chain Inventory Table & Steppers */
+.inventory-table-card {
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 32px;
+}
+
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.inventory-table th, .inventory-table td {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.inventory-table th {
+  background: var(--slate-50);
+  font-weight: 700;
+  color: var(--slate-700);
+}
+
+.stepper-control {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.stepper-btn {
+  background: var(--slate-100);
+  border: none;
+  padding: 4px 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.stepper-btn:hover {
+  background: var(--slate-200);
+}
+
+.stepper-val {
+  padding: 4px 12px;
+  font-weight: 700;
+  color: var(--slate-900);
+  min-width: 32px;
+  text-align: center;
+}
+
+/* Secure Inter-Facility Transfer Pipeline Ledger */
+.transfer-pipeline-card {
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+}
+
+.requisition-item-card {
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.req-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.req-tracking-hash {
+  font-family: monospace;
+  font-size: 0.775rem;
+  background: var(--slate-200);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  color: var(--slate-800);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Multi-stage Progress Stepper */
+.status-stepper-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding: 12px 0;
+}
+
+.status-step-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 2;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--slate-500);
+}
+
+.step-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--slate-200);
+  color: var(--slate-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.status-step-node.completed .step-circle {
+  background: var(--primary-600);
+  color: var(--white);
+}
+
+.status-step-node.active .step-circle {
+  background: var(--teal-600);
+  color: var(--white);
+  box-shadow: 0 0 0 4px var(--primary-100);
+}
+
+.status-stepper-line {
+  position: absolute;
+  top: 25px;
+  left: 20px;
+  right: 20px;
+  height: 3px;
+  background: var(--slate-200);
+  z-index: 1;
+}
+
+/* Quick Fill Demo Passkey Button */
+.demo-passkey-hint {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: var(--slate-500);
+}
+
+.demo-passkey-btn {
+  background: var(--primary-50);
+  border: 1px dashed var(--primary-400);
+  color: var(--primary-800);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-family: monospace;
+  font-weight: 700;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+.demo-passkey-btn:hover {
+  background: var(--primary-100);
+}

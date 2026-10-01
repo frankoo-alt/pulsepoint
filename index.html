@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulsePoint &mdash; Integrated Healthcare, Pharmacy Stock & Secure Blood Bank Hub</title>
+  <meta name="description" content="PulsePoint is a modern integrated healthcare platform connecting regional pharmacy stocks, diagnostic lab slot booking, aggregated public blood availability, and secure hospital inter-facility transfer logistics." />
+  <meta name="keywords" content="PulsePoint, healthcare, pharmacy stock, blood bank, voluntary blood donor, diagnostic booking, medical logistics" />
+  <meta name="theme-color" content="#0284c7" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <link rel="stylesheet" href="styles/responsive.css" />
+</head>
+<body>
+
+  <!-- Navigation & Emergency Ticker Container -->
+  <div id="navbarContainer"></div>
+
+  <!-- Main Content Wrapper -->
+  <main class="main-content" id="mainContentArea">
+
+    <!-- Platform Hero Section -->
+    <section class="hero-card" aria-label="PulsePoint Healthcare Overview">
+      <div class="hero-text">
+        <div class="hero-badge-tag">
+          <span>🏥 Accredited Regional Healthcare Hub</span>
+        </div>
+        <h2 class="hero-title">
+          The Future of <span>Integrated Healthcare</span> & Blood Logistics.
+        </h2>
+        <p class="hero-description">
+          Find prescription drugs across local chemists, schedule diagnostic lab screenings, inspect regional blood reserves, and coordinate secure inter-hospital cold-chain emergency transfers with strict data privacy.
+        </p>
+
+        <!-- Live Platform Highlights -->
+        <div class="hero-highlights">
+          <div class="hero-stat-pill">
+            <span style="font-size: 1.5rem;">💊</span>
+            <div>
+              <strong>14+</strong>
+              <span>Verified Dispensaries</span>
+            </div>
+          </div>
+
+          <div class="hero-stat-pill">
+            <span style="font-size: 1.5rem;">🧪</span>
+            <div>
+              <strong>6 Panels</strong>
+              <span>Fast-Track Diagnostics</span>
+            </div>
+          </div>
+
+          <div class="hero-stat-pill">
+            <span style="font-size: 1.5rem;">🩸</span>
+            <div>
+              <strong>8 Groups</strong>
+              <span>Monitored 24/7</span>
+            </div>
+          </div>
+
+          <div class="hero-stat-pill">
+            <span style="font-size: 1.5rem;">❄️</span>
+            <div>
+              <strong>3.9&deg;C</strong>
+              <span>Cold-Chain Compliance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-banner-visual">
+        <img src="assets/hero_banner.jpg" alt="PulsePoint Medical Platform Dashboard Banner" width="440" height="247" />
+      </div>
+    </section>
+
+    <!-- Dynamic Module Container (Pharmacy, Diagnostics, Blood Bank, Donor Portal, Hospital Admin) -->
+    <section id="moduleContainer" aria-live="polite">
+      <!-- Active module is rendered dynamically via js/app.js -->
+    </section>
+
+  </main>
+
+  <!-- Global Toast Notification Stack -->
+  <div class="toast-container" id="toastContainer" aria-live="assertive"></div>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="assets/logo.png" alt="PulsePoint Logo" />
+          <div>
+            <h4>PulsePoint Healthcare Infrastructure</h4>
+            <p style="font-size: 0.8rem; color: var(--slate-400);">Unified Clinical Pharmacy, Lab Scheduling & Blood Supply Pipeline</p>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 20px; font-size: 0.85rem;">
+          <div>🚨 Emergency Trauma Hotline: <strong style="color: #ef4444;">+1 (555) 019-9111</strong></div>
+          <div>❄️ Cold-Chain Dispatch: <strong style="color: #38bdf8;">+1 (555) 019-7000</strong></div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 PulsePoint Medical Systems. Developed for Healthcare Innovation Hackathon.</p>
+        <p>HIPAA & GDPR Architecture &bull; Cryptographically Verified Logistics Tokens &bull; Role-Based Access Control</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic Modules -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

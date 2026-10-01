@@ -1,0 +1,10 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, HEAD, OPTIONS"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"

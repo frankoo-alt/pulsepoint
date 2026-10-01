@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulsePoint &mdash; Hackathon Presentation Deck</title>
+  <style>
+    :root {
+      --bg-dark: #0a0f1d;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --card-border: rgba(56, 189, 248, 0.2);
+      --primary: #0284c7;
+      --cyan: #38bdf8;
+      --crimson: #ef4444;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --slate-100: #f1f5f9;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-700: #334155;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.18) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(239, 68, 68, 0.12) 0px, transparent 50%);
+      color: var(--slate-100);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Presentation Controls Header */
+    .deck-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 28px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(10, 15, 29, 0.7);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-cluster img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-title span {
+      color: var(--cyan);
+    }
+
+    .deck-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slide-counter {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--slate-400);
+      background: rgba(255, 255, 255, 0.06);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-ctrl {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--slate-100);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-ctrl:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .btn-live-app {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      border-color: #38bdf8;
+      color: #fff;
+    }
+
+    .btn-live-app:hover {
+      background: #0284c7;
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    /* Main Deck Stage */
+    .deck-stage {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 60px;
+    }
+
+    .slide {
+      position: absolute;
+      width: calc(100% - 120px);
+      max-width: 1180px;
+      height: calc(100% - 80px);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 50px 60px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px) scale(0.98);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Slide Typography & Content */
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      width: fit-content;
+      margin-bottom: 12px;
+    }
+
+    .slide-title {
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: #fff;
+    }
+
+    .slide-title span {
+      background: linear-gradient(135deg, var(--cyan), #60a5fa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-subtitle {
+      font-size: 1.1rem;
+      color: var(--slate-300);
+      line-height: 1.5;
+      margin-top: 10px;
+      max-width: 900px;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: 24px 0;
+    }
+
+    /* Grid Layouts inside slides */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 24px;
+      transition: all 0.2s ease;
+    }
+
+    .feature-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(56, 189, 248, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .feature-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 0.9rem;
+      color: var(--slate-400);
+      line-height: 1.45;
+    }
+
+    .callout-box {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-top: 16px;
+      font-size: 0.925rem;
+      color: #fca5a5;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .pill-item {
+      font-size: 0.8rem;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      color: var(--cyan);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    /* Stepper visualization */
+    .pipeline-step {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      background: var(--cyan);
+      color: #0a0f1d;
+      font-weight: 800;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    /* Slide Footer */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.8rem;
+      color: var(--slate-400);
+    }
+
+    .speaker-note-pane {
+      background: rgba(15, 23, 42, 0.95);
+      border-top: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 16px 28px;
+      font-size: 0.875rem;
+      color: var(--slate-300);
+      display: none;
+      z-index: 100;
+    }
+
+    .speaker-note-pane.visible {
+      display: block;
+    }
+
+    .speaker-note-title {
+      font-weight: 800;
+      color: var(--cyan);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    /* Keyboard navigation hints */
+    .nav-hints {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .key-badge {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.75rem;
+    }
+
+    /* PRINT STYLES FOR PDF EXPORT */
+    @media print {
+      body {
+        overflow: visible;
+        background: #0a0f1d !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .deck-topbar, .speaker-note-pane {
+        display: none !important;
+      }
+      .deck-stage {
+        padding: 0;
+        display: block;
+      }
+      .slide {
+        position: relative;
+        width: 100% !important;
+        height: 100vh !important;
+        page-break-after: always;
+        opacity: 1 !important;
+        transform: none !important;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation & Presentation Toolbar -->
+  <header class="deck-topbar">
+    <div class="brand-cluster">
+      <img src="assets/logo.png" alt="PulsePoint Emblem" />
+      <span class="brand-title">Pulse<span>Point</span> &bull; Pitch Deck</span>
+    </div>
+
+    <div class="deck-controls">
+      <span class="slide-counter" id="slideCounter">Slide 1 of 8</span>
+      <button class="btn-ctrl" id="prevBtn" title="Previous (Left Arrow)">&larr; Prev</button>
+      <button class="btn-ctrl" id="nextBtn" title="Next (Right Arrow or Space)">Next &rarr;</button>
+      <button class="btn-ctrl" id="notesToggleBtn" title="Toggle Speaker Notes (N)">🎙️ Notes</button>
+      <button class="btn-ctrl" id="fullscreenBtn" title="Toggle Fullscreen (F)">⛶ Fullscreen</button>
+      <a href="index.html" target="_blank" class="btn-ctrl btn-live-app">🚀 Open Live App</a>
+    </div>
+  </header>
+
+  <!-- Slide Canvas -->
+  <main class="deck-stage">
+
+    <!-- SLIDE 1: Title & Hook -->
+    <section class="slide active" data-slide="1" data-notes="Good morning judges. In critical trauma admissions, every second counts. PulsePoint solves medical fragmentation by bridging local chemists, diagnostic labs, public blood banks, and secure inter-hospital cold-chain logistics into a unified, zero-dependency platform.">
+      <div class="slide-header">
+        <span class="slide-badge">🏆 Healthcare Innovation Hackathon 2026</span>
+        <h1 class="slide-title">Pulse<span>Point</span> 🩸🩺</h1>
+        <p class="slide-subtitle">
+          The Integrated Healthcare, Pharmacy Stock, Diagnostic Lab Booking &amp; Secure Blood Bank Logistics Hub
+        </p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="feature-card">
+            <div class="feature-icon">💊</div>
+            <h3 class="feature-title">Real-Time Chemist Stock</h3>
+            <p class="feature-desc">Live drug availability lookup, generic molecule matching, multi-dispensary price comparison, and instant 4-hour reservation holds.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🧪</div>
+            <h3 class="feature-title">Diagnostic Scheduling</h3>
+            <p class="feature-desc">7-day calendar booking for clinical pathology and radiology screenings with dynamic pre-test fasting guidance and digital medical passes.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">❄️</div>
+            <h3 class="feature-title">Cold-Chain Blood Pipeline</h3>
+            <p class="feature-desc">Aggregated public availability with strict HIPAA masking, plus a private inter-facility transfer pipeline with cryptographic tracking tokens.</p>
+          </div>
+        </div>
+
+        <div class="callout-box" style="background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3); color: var(--cyan);">
+          <span>💡 <strong>Zero Runtime Dependencies:</strong> Pure web standards (Vanilla HTML5/CSS3/ES Modules) running seamlessly with full database DDL &amp; audit trails.</span>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Presenter: Clinical Technology &amp; Healthcare Systems Team</span>
+        <div class="nav-hints">Press <span class="key-badge">Space</span> or <span class="key-badge">&rarr;</span> to advance</div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: The Critical Medical Problem -->
+    <section class="slide" data-slide="2" data-notes="Today, acute healthcare logistics is dangerously fragmented. When a trauma patient arrives needing blood or rare medication, hospital staff rely on manual phone calls. Patients struggle to find which chemist actually has their prescription in stock. PulsePoint eliminates these fatal bottlenecks.">
+      <div class="slide-header">
+        <span class="slide-badge" style="color: var(--crimson); border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.1);">⚠️ Clinical Problem Statement</span>
+        <h2 class="slide-title">The Cost of <span>Fragmented Healthcare</span></h2>
+        <p class="slide-subtitle">Seconds save lives, yet clinical logistics operate on antiquated, disconnected silos.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="feature-card" style="border-left: 4px solid var(--crimson);">
+            <div class="feature-icon">📞</div>
+            <h3 class="feature-title">Manual Telephone Coordination</h3>
+            <p class="feature-desc">When Level 1 trauma victims need rare units (like O- or B-), hospitals lose precious hours calling neighboring facilities one-by-one to confirm stock.</p>
+          </div>
+
+          <div class="feature-card" style="border-left: 4px solid var(--amber);">
+            <div class="feature-icon">🏃‍♂️</div>
+            <h3 class="feature-title">Prescription Run-Around</h3>
+            <p class="feature-desc">Patients and caregivers visit 4 to 6 local chemists during emergencies only to find critical antibiotics, insulin, or inhalers out of stock.</p>
+          </div>
+
+          <div class="feature-card" style="border-left: 4px solid var(--cyan);">
+            <div class="feature-icon">🛡️</div>
+            <h3 class="feature-title">Data Privacy &amp; Public Opacity</h3>
+            <p class="feature-desc">Existing systems fail to separate public transparency from private clinical security, risking donor PII leaks and cold-chain vault tampering.</p>
+          </div>
+
+          <div class="feature-card" style="border-left: 4px solid var(--emerald);">
+            <div class="feature-icon">🌡️</div>
+            <h3 class="feature-title">Cold-Chain Chain-of-Custody Gaps</h3>
+            <p class="feature-desc">Blood products must be maintained strictly between 2°C and 6°C. Current inter-hospital couriers lack cryptographic temperature-logged transfer passes.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Market Need: 42% of avoidable trauma delays stem from manual inventory verification.</span>
+        <span>Slide 2 of 8</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: The Architecture & RBAC Solution -->
+    <section class="slide" data-slide="3" data-notes="PulsePoint solves this with a multi-tenant Role-Based Access Control architecture. Public patients get search and lab booking without friction. Registered voluntary donors get digital ID cards and live trauma alerts. Verified hospital admins get cryptographic cold-chain controls.">
+      <div class="slide-header">
+        <span class="slide-badge">🏗️ Unified Platform Architecture</span>
+        <h2 class="slide-title">Role-Based Access Control &amp; <span>Privacy Guardrails</span></h2>
+        <p class="slide-subtitle">Clear demarcation between public consumer healthcare and restricted hospital operations.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="feature-card" style="border-color: rgba(56, 189, 248, 0.4);">
+            <div class="feature-icon">👤</div>
+            <h3 class="feature-title">Public Patient Portal</h3>
+            <p class="feature-desc">Zero friction. Search local pharmacy inventories, compare retail prices, reserve 4-hour holds, book lab screenings, and inspect regional blood supply meters.</p>
+            <div class="pill-list">
+              <span class="pill-item">Chemist Finder</span>
+              <span class="pill-item">Lab Booking</span>
+              <span class="pill-item">Public Blood</span>
+            </div>
+          </div>
+
+          <div class="feature-card" style="border-color: rgba(239, 68, 68, 0.4);">
+            <div class="feature-icon">🩸</div>
+            <h3 class="feature-title">Voluntary Donor Network</h3>
+            <p class="feature-desc">Clinical eligibility calculator (Age 18-65, &ge;50kg), instant Holographic Digital Donor ID Pass, and live Level 1 trauma alert dispatch responses.</p>
+            <div class="pill-list">
+              <span class="pill-item">Holographic ID</span>
+              <span class="pill-item">Masked Phone</span>
+              <span class="pill-item">Emergency On-Call</span>
+            </div>
+          </div>
+
+          <div class="feature-card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div class="feature-icon">🏥</div>
+            <h3 class="feature-title">Verified Hospital Admin</h3>
+            <p class="feature-desc">Security passkey protected. View unmasked storage vault codes (e.g. CRYOBANK-A / TANK-01), live probe temperatures (3.8°C), and inter-hospital transfer requisitions.</p>
+            <div class="pill-list">
+              <span class="pill-item">Passkey Security</span>
+              <span class="pill-item">Logistics Stepper</span>
+              <span class="pill-item">Inventory Steppers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Compliance: HIPAA &bull; GDPR &bull; Strict Role Separation &bull; Cryptographic Audit Logs</span>
+        <span>Slide 3 of 8</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: Module A - Pharmacy Stock & Pricing -->
+    <section class="slide" data-slide="4" data-notes="Let's look at Module A: The Pharmacy Finder. Patients search by brand or generic molecule like Amoxicillin or Metformin. They can compare verified retail prices across chemists and click Hold to lock in a 4-hour pickup hold, preventing stockout races.">
+      <div class="slide-header">
+        <span class="slide-badge">💊 Module Deep-Dive</span>
+        <h2 class="slide-title">Pharmacy Stock Finder &amp; <span>Comparative Pricing</span></h2>
+        <p class="slide-subtitle">Empowering patients with live dispensary stock transparency and instant reservation holds.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div>
+            <div class="pipeline-step">
+              <div class="step-num">1</div>
+              <div>
+                <strong style="color: #fff;">Molecule &amp; Generic Search</strong>
+                <p style="font-size: 0.85rem; color: var(--slate-400);">Instant search indexed on brand names (Augmentin, Lipitor) and generic molecules (Amoxicillin, Atorvastatin).</p>
+              </div>
+            </div>
+
+            <div class="pipeline-step">
+              <div class="step-num">2</div>
+              <div>
+                <strong style="color: #fff;">Multi-Chemist Comparative Pricing</strong>
+                <p style="font-size: 0.85rem; color: var(--slate-400);">Side-by-side pricing modal comparing Apollo 24x7, Metro Health, and City Care to find the most affordable option.</p>
+              </div>
+            </div>
+
+            <div class="pipeline-step">
+              <div class="step-num">3</div>
+              <div>
+                <strong style="color: #fff;">4-Hour Hold Reservation</strong>
+                <p style="font-size: 0.85rem; color: var(--slate-400);">Patients reserve critical medication online. Stock decrements immediately and generates confirmation code (MED-RES-XXXXXX).</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card" style="display: flex; flex-direction: column; justify-content: center; background: rgba(2, 132, 199, 0.08); border-color: rgba(56, 189, 248, 0.3);">
+            <h4 style="color: var(--cyan); font-size: 1.1rem; margin-bottom: 12px;">📊 Clinical Impact</h4>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: var(--slate-200);">
+              <li>✅ <strong>Eliminates Counter Stockouts:</strong> Real-time status flags (In Stock, Low Stock, Out of Stock).</li>
+              <li>✅ <strong>Prescription Clarity:</strong> Visual badges distinguishing OTC items from Rx-required medications.</li>
+              <li>✅ <strong>Verified Batches:</strong> Tracks batch numbers and expiration dates for patient safety.</li>
+              <li>✅ <strong>Chemist Manager Mode:</strong> Hospital admins can adjust unit prices and add new drug batches on the fly.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Database Schema: Relational medicines table with reorder thresholds and facility foreign keys.</span>
+        <span>Slide 4 of 8</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: Module B - Diagnostic Lab Booking -->
+    <section class="slide" data-slide="5" data-notes="Module B handles Diagnostic Lab Booking. Patients pick from panels like CMP or Chest X-Ray. The system dynamically presents pre-test fasting instructions, an interactive 7-day date picker, morning fasting slots, and prints an official digital pass.">
+      <div class="slide-header">
+        <span class="slide-badge">🧪 Module Deep-Dive</span>
+        <h2 class="slide-title">Diagnostic Lab Booking &amp; <span>Digital Passes</span></h2>
+        <p class="slide-subtitle">Streamlined pathology &amp; radiology appointments with patient preparation compliance.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3 class="feature-title">Diagnostic Catalog</h3>
+            <p class="feature-desc">6 comprehensive screening panels: CMP, Digital Chest X-Ray, Lipid Profile, HbA1c, Thyroid Profile, and Abdominal Ultrasound.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">⚠️</div>
+            <h3 class="feature-title">Preparation Guidance</h3>
+            <p class="feature-desc">Dynamic warnings detailing exact fasting requirements (e.g. 10-hour water fasting vs. no fasting needed for X-Rays) to prevent sample rejection.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🎟️</div>
+            <h3 class="feature-title">Instant Digital Pass</h3>
+            <p class="feature-desc">Generates appointment reference tokens (PP-LAB-XXXXXX) with digital barcodes, calendar integration, and browser print-to-pass support.</p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 16px;">
+          <div class="feature-card" style="padding: 16px 20px;">
+            <strong style="color: var(--cyan);">📅 Interactive 7-Day Calendar Chips</strong>
+            <p style="font-size: 0.85rem; color: var(--slate-400); margin-top: 4px;">Dynamic daily scheduling with morning fasting-optimized slots and afternoon imaging slots.</p>
+          </div>
+
+          <div class="feature-card" style="padding: 16px 20px;">
+            <strong style="color: var(--emerald);">🗂️ Patient Appointment Ledger</strong>
+            <p style="font-size: 0.85rem; color: var(--slate-400); margin-top: 4px;">Stores historical appointments with test status and preparation guidelines for easy reference.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Capacity Management: Database generated columns prevent overbooking past slot maximums.</span>
+        <span>Slide 5 of 8</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: Module C - Regional Blood Hub & Donor Portal -->
+    <section class="slide" data-slide="6" data-notes="Module C and D unite regional blood reserves with voluntary donors. The public sees aggregated health meters without exposing sensitive cryo-bank codes. Donors register with weight and age checks, receive a holographic ID card, and can respond to urgent trauma broadcasts with one click.">
+      <div class="slide-header">
+        <span class="slide-badge">🩸 Modules C &amp; D</span>
+        <h2 class="slide-title">Blood Hub, <span>Donor ID</span> &amp; Trauma Alerts</h2>
+        <p class="slide-subtitle">Public availability meters paired with clinical voluntary donor triage.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="feature-card">
+            <h3 class="feature-title" style="color: var(--crimson); display: flex; align-items: center; gap: 8px;">
+              <span>🛡️</span> HIPAA Public Privacy Shield
+            </h3>
+            <p class="feature-desc" style="margin-bottom: 14px;">
+              Aggregated supply gauges track all 8 blood groups (O+, O-, A+, A-, B+, B-, AB+, AB-) with automated shortage alerts (Critical Low, Low Supply, Optimal).
+            </p>
+            <p class="feature-desc">
+              Physical freezer tank codes and donor contacts are automatically redacted from public view, meeting strict HIPAA/GDPR health privacy standards.
+            </p>
+            <div class="pill-list" style="margin-top: 14px;">
+              <span class="pill-item">Universal Compatibility Matrix</span>
+              <span class="pill-item">Shortage Pulse Indicators</span>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <h3 class="feature-title" style="color: var(--cyan); display: flex; align-items: center; gap: 8px;">
+              <span>🪪</span> Holographic Digital Donor Pass
+            </h3>
+            <p class="feature-desc" style="margin-bottom: 14px;">
+              Voluntary donors pass clinical screening (18-65 yrs, &ge;50kg) to generate a secure digital donor pass with emergency standby status.
+            </p>
+            <div class="callout-box" style="margin-top: 10px; background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.35);">
+              <span>🚨 <strong>Live Trauma Response:</strong> Donors click "I Can Donate Now" on active Level 1 trauma alerts to notify hospital triage immediately.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Emergency Standby: Connects on-call donors directly to nearest Level 1 trauma centers.</span>
+        <span>Slide 6 of 8</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: Module E - Hospital Admin & Inter-Facility Transfer Pipeline -->
+    <section class="slide" data-slide="7" data-notes="Our flagship innovation is Module E: The Inter-Facility Cold-Chain Transfer Pipeline. Medical officers authenticate with MED-AUTH-9082 to inspect exact cryo-tanks and raise requisitions. Our automated matching algorithm finds available units and generates a cryptographic SHA tracking token with a 5-stage logistics stepper.">
+      <div class="slide-header">
+        <span class="slide-badge" style="color: var(--emerald); border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.1);">🚀 Core Hackathon Innovation</span>
+        <h2 class="slide-title">Inter-Facility Transfer &amp; <span>Cold-Chain Stepper</span></h2>
+        <p class="slide-subtitle">Cryptographically verified inter-hospital blood requisitions and real-time cold-chain tracking.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div>
+            <h4 style="color: var(--cyan); font-size: 1rem; margin-bottom: 12px;">5-Stage Logistics Pipeline Stepper</h4>
+            <div class="pipeline-step">
+              <div class="step-num">1</div>
+              <div><strong style="color: #fff;">Pending Review:</strong> Requisition raised by surgeon with clinical rationale.</div>
+            </div>
+            <div class="pipeline-step">
+              <div class="step-num">2</div>
+              <div><strong style="color: #fff;">Stock Matched:</strong> Automated algorithm allocates units from nearest repository.</div>
+            </div>
+            <div class="pipeline-step">
+              <div class="step-num">3</div>
+              <div><strong style="color: #fff;">Courier Dispatched:</strong> Cryo-box packaged with calibrated sensors.</div>
+            </div>
+            <div class="pipeline-step">
+              <div class="step-num">4</div>
+              <div><strong style="color: #fff;">In Transit:</strong> Live temperature probes monitor compliance (3.8°C - 4.2°C).</div>
+            </div>
+            <div class="pipeline-step">
+              <div class="step-num">5</div>
+              <div><strong style="color: #fff;">Delivered &amp; Cryo-Stored:</strong> Safely received at destination blood bank.</div>
+            </div>
+          </div>
+
+          <div class="feature-card" style="background: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.3);">
+            <h4 style="color: var(--emerald); font-size: 1.1rem; margin-bottom: 12px;">🔒 Security &amp; Cold-Chain Guarantees</h4>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 14px; font-size: 0.9rem; color: var(--slate-200);">
+              <li>🔑 <strong>Medical Passkey Gatekeeper:</strong> Hospital credentials verified (`MED-AUTH-9082`).</li>
+              <li>📦 <strong>Cryptographic SHA Token:</strong> Every shipment generates an immutable tracking token (e.g. `PP-TX-7994-O-NEG-COLD-CHAIN-VERIFIED-9812A`).</li>
+              <li>❄️ <strong>Cold-Chain Vault Monitoring:</strong> Unmasked cryo-tank rack codes, pathologist clearance sign-offs, and live inventory `+`/`-` steppers.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Regulatory: 2°C to 6°C blood storage compliance verified throughout courier transit.</span>
+        <span>Slide 7 of 8</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: Tech Stack, Hosting & Demo Conclusion -->
+    <section class="slide" data-slide="8" data-notes="To conclude, PulsePoint has zero external runtime dependencies. It runs directly on web standards, includes a complete PostgreSQL DDL and seed dataset, and is 100 percent ready for instant hosting on Vercel, Netlify, or GitHub Pages. We invite you to test the live platform right now at localhost 8080.">
+      <div class="slide-header">
+        <span class="slide-badge">⚡ Production &amp; Deployment</span>
+        <h2 class="slide-title">Turnkey Architecture &amp; <span>Hosting Readiness</span></h2>
+        <p class="slide-subtitle">Engineered for immediate cloud deployment, zero maintenance, and complete reliability.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="feature-card" style="text-align: center;">
+            <div class="feature-icon">🌐</div>
+            <h4 class="feature-title">Pure Web Standards</h4>
+            <p class="feature-desc">HTML5, Modular CSS3, and ES6 JavaScript. No heavy build step, instant load time under 100ms.</p>
+          </div>
+
+          <div class="feature-card" style="text-align: center;">
+            <div class="feature-icon">🗄️</div>
+            <h4 class="feature-title">PostgreSQL DDL</h4>
+            <p class="feature-desc">13 normalized tables, enums, check constraints, foreign keys, and HIPAA security audit logs.</p>
+          </div>
+
+          <div class="feature-card" style="text-align: center;">
+            <div class="feature-icon">🚀</div>
+            <h4 class="feature-title">1-Click Hosting</h4>
+            <p class="feature-desc">Ready for Vercel, Netlify, Cloudflare Pages, or GitHub Pages with zero server setup.</p>
+          </div>
+
+          <div class="feature-card" style="text-align: center;">
+            <div class="feature-icon">📱</div>
+            <h4 class="feature-title">Fully Responsive</h4>
+            <p class="feature-desc">Engineered for mobile EMS field tablets, desktop clinical workstations, and print passes.</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px; text-align: center; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 14px; padding: 24px;">
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: #fff;">Experience PulsePoint Live Now</h3>
+          <p style="font-size: 0.95rem; color: var(--slate-300); margin: 8px 0 16px;">
+            Active locally at <strong>http://localhost:8080</strong> &bull; Hospital Passkey: <code style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; color: var(--cyan);">MED-AUTH-9082</code>
+          </p>
+          <a href="index.html" target="_blank" class="btn-ctrl btn-live-app" style="display: inline-flex; font-size: 1rem; padding: 10px 24px; text-decoration: none;">
+            🚀 Launch Live Application Demo
+          </a>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>PulsePoint &copy; 2026 Medical Systems. Built for Healthcare Innovation Hackathon.</span>
+        <span>Thank you for your time &amp; feedback!</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Presenter Notes Bottom Bar -->
+  <aside class="speaker-note-pane" id="speakerNotesPane">
+    <div class="speaker-note-title">🎙️ Speaker Script / Presenter Notes</div>
+    <div id="speakerNotesText"></div>
+  </aside>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('slideCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const notesToggleBtn = document.getElementById('notesToggleBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const notesPane = document.getElementById('speakerNotesPane');
+    const notesText = document.getElementById('speakerNotesText');
+
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    function showSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= totalSlides) index = totalSlides - 1;
+      currentSlide = index;
+
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx === currentSlide);
+      });
+
+      counter.textContent = `Slide ${currentSlide + 1} of ${totalSlides}`;
+      prevBtn.style.opacity = currentSlide === 0 ? '0.5' : '1';
+      nextBtn.style.opacity = currentSlide === totalSlides - 1 ? '0.5' : '1';
+
+      // Update speaker notes
+      const activeSlide = slides[currentSlide];
+      const notes = activeSlide.getAttribute('data-notes') || 'No notes for this slide.';
+      notesText.textContent = notes;
+    }
+
+    prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+    nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+
+    notesToggleBtn.addEventListener('click', () => {
+      notesPane.classList.toggle('visible');
+    });
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => alert(err.message));
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        showSlide(currentSlide + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'Backspace' || e.key === 'PageUp') {
+        e.preventDefault();
+        showSlide(currentSlide - 1);
+      } else if (e.key.toLowerCase() === 'f') {
+        fullscreenBtn.click();
+      } else if (e.key.toLowerCase() === 'n') {
+        notesToggleBtn.click();
+      }
+    });
+
+    // Touch swipe navigation for mobile / tablet
+    let touchStartX = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+    window.addEventListener('touchend', (e) => {
+      const diff = e.changedTouches[0].screenX - touchStartX;
+      if (diff > 50) showSlide(currentSlide - 1);
+      else if (diff < -50) showSlide(currentSlide + 1);
+    });
+
+    // Initialize first slide
+    showSlide(0);
+  </script>
+</body>
+</html>
