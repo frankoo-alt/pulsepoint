@@ -65,33 +65,6 @@ export function initApp() {
 
   // Initial render
   render();
-
-  // Window Frame Controls (Toggle Windowed / Full Width)
-  const windowToggleBtn = document.getElementById('windowSizeToggleBtn');
-  const windowExpandDot = document.getElementById('windowExpandDot');
-  const windowToggleLabel = document.getElementById('windowToggleLabel');
-
-  function updateWindowModeUI(isFullWidth) {
-    if (isFullWidth) {
-      document.body.classList.add('full-width-mode');
-      if (windowToggleLabel) windowToggleLabel.textContent = 'Windowed';
-    } else {
-      document.body.classList.remove('full-width-mode');
-      if (windowToggleLabel) windowToggleLabel.textContent = 'Full Width';
-    }
-  }
-
-  const savedMode = localStorage.getItem('PULSEPOINT_WINDOW_MODE') === 'FULL_WIDTH';
-  updateWindowModeUI(savedMode);
-
-  function toggleWindowMode() {
-    const isNowFullWidth = !document.body.classList.contains('full-width-mode');
-    updateWindowModeUI(isNowFullWidth);
-    localStorage.setItem('PULSEPOINT_WINDOW_MODE', isNowFullWidth ? 'FULL_WIDTH' : 'WINDOWED');
-  }
-
-  if (windowToggleBtn) windowToggleBtn.addEventListener('click', toggleWindowMode);
-  if (windowExpandDot) windowExpandDot.addEventListener('click', toggleWindowMode);
 }
 
 // Boot application upon DOM readiness
