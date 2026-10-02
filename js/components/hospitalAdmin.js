@@ -352,7 +352,7 @@ export function renderHospitalAdminModule(container) {
                 <th>Category</th>
                 <th>Quantity In Stock</th>
                 <th>Stock Status Toggle</th>
-                <th>Price ($)</th>
+                <th>Price (₹)</th>
                 <th>Quick Actions</th>
               </tr>
             </thead>
@@ -442,8 +442,8 @@ export function renderHospitalAdminModule(container) {
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="newMedPrice">Price ($)</label>
-              <input type="number" id="newMedPrice" class="form-input" step="0.1" value="15.00" required />
+              <label class="form-label" for="newMedPrice">Price (₹)</label>
+              <input type="number" id="newMedPrice" class="form-input" step="1" value="150.00" required />
             </div>
           </div>
 

@@ -271,6 +271,17 @@ body {
   border-color: var(--primary-900);
 }
 
+.nav-tab-btn.tab-pharm-admin {
+  border: 1px dashed var(--teal-600);
+  color: var(--teal-800);
+}
+
+.nav-tab-btn.tab-pharm-admin.active {
+  background: var(--teal-700);
+  color: var(--white);
+  border-color: var(--teal-700);
+}
+
 /* Role Selector Badge Bar */
 .role-control-group {
   display: flex;

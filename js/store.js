@@ -7,6 +7,7 @@ import {
   INITIAL_FACILITIES,
   INITIAL_MEDICINES,
   INITIAL_DIAGNOSTIC_TESTS,
+  INITIAL_RESERVATIONS,
   INITIAL_SLOT_WINDOWS,
   INITIAL_BLOOD_INVENTORY,
   INITIAL_EMERGENCY_ALERTS,
@@ -15,8 +16,9 @@ import {
   COMPATIBILITY_RULES
 } from './mockData.js';
 
-const STORAGE_KEY = 'PULSEPOINT_STATE_V1';
+const STORAGE_KEY = 'PULSEPOINT_STATE_V2';
 export const ADMIN_PASSKEY = 'MED-AUTH-9082';
+export const PHARMACY_PASSKEY = 'PHARM-AUTH-4421';
 
 class Store {
   constructor() {
@@ -31,19 +33,25 @@ class Store {
         const parsed = JSON.parse(cached);
         // Ensure default structure if previous version lacked any key
         return {
-          currentRole: parsed.currentRole || 'PATIENT', // 'PATIENT' | 'DONOR' | 'HOSPITAL_ADMIN'
+          currentRole: parsed.currentRole || 'PATIENT', // 'PATIENT' | 'DONOR' | 'HOSPITAL_ADMIN' | 'PHARMACY_ADMIN'
           activeTab: parsed.activeTab || 'pharmacy',
           facilities: parsed.facilities || INITIAL_FACILITIES,
           medicines: parsed.medicines || INITIAL_MEDICINES,
           tests: parsed.tests || INITIAL_DIAGNOSTIC_TESTS,
           slotWindows: INITIAL_SLOT_WINDOWS,
           bookings: parsed.bookings || [],
+          reservations: parsed.reservations || INITIAL_RESERVATIONS,
           bloodInventory: parsed.bloodInventory || INITIAL_BLOOD_INVENTORY,
           emergencyAlerts: parsed.emergencyAlerts || INITIAL_EMERGENCY_ALERTS,
           donors: parsed.donors || INITIAL_DONORS,
           hospitalRequests: parsed.hospitalRequests || INITIAL_HOSPITAL_REQUESTS,
           currentDonorProfile: parsed.currentDonorProfile || null,
           adminSession: parsed.adminSession || { isAuthenticated: false, hospital: 'fac-hosp-01', officer: 'Dr. Sarah Lin' },
+          pharmacyAdminSession: parsed.pharmacyAdminSession || {
+            isAuthenticated: true,
+            activePharmacyId: 'fac-pharm-01',
+            pharmacist: 'R. Sharma, B.Pharm'
+          },
           toasts: []
         };
       } catch (e) {
@@ -63,18 +71,19 @@ class Store {
           id: 'bk-demo-01',
           bookingRef: 'PP-LAB-891024',
           patientName: 'Eleanor Vance',
-          patientPhone: '+1 (555) 019-3321',
+          patientPhone: '+91 98450 33210',
           patientEmail: 'eleanor.vance@example.com',
           testId: 'test-01',
           testName: 'Comprehensive Metabolic & Blood Panel (CMP)',
           slotDate: new Date().toISOString().split('T')[0],
           slotTime: '08:00 AM - 09:00 AM',
           fastingRequired: '10 Hours Fasting',
-          price: 45.00,
+          price: 850.00,
           status: 'CONFIRMED',
           bookedAt: new Date().toLocaleString()
         }
       ],
+      reservations: INITIAL_RESERVATIONS,
       bloodInventory: INITIAL_BLOOD_INVENTORY,
       emergencyAlerts: INITIAL_EMERGENCY_ALERTS,
       donors: INITIAL_DONORS,
@@ -96,6 +105,11 @@ class Store {
         isAuthenticated: false,
         hospital: 'fac-hosp-01',
         officer: 'Dr. Sarah Lin (Chief Hematology, Lic #MED-8812)'
+      },
+      pharmacyAdminSession: {
+        isAuthenticated: true,
+        activePharmacyId: 'fac-pharm-01',
+        pharmacist: 'R. Sharma, B.Pharm'
       },
       toasts: []
     };
@@ -150,12 +164,19 @@ class Store {
       this.showToast('Security Cleared', 'Logged in as St. Jude Verified Medical Officer. Private facilities unmasked.', 'success');
     }
 
+    if (role === 'PHARMACY_ADMIN') {
+      const activeShop = this.state.facilities.find(f => f.id === this.state.pharmacyAdminSession.activePharmacyId);
+      this.showToast('Chemist Mode Active', `Logged in as Medical Shop Admin (${activeShop ? activeShop.name : 'Licensed Dispensary'}).`, 'success');
+    }
+
     this.state.currentRole = role;
     if (role === 'HOSPITAL_ADMIN') {
       this.state.activeTab = 'hospital-admin';
+    } else if (role === 'PHARMACY_ADMIN') {
+      this.state.activeTab = 'pharmacy-admin';
     } else if (role === 'DONOR') {
       this.state.activeTab = 'donor-portal';
-    } else if (this.state.activeTab === 'hospital-admin') {
+    } else if (this.state.activeTab === 'hospital-admin' || this.state.activeTab === 'pharmacy-admin') {
       this.state.activeTab = 'pharmacy';
     }
 
@@ -167,7 +188,7 @@ class Store {
     this.state.adminSession.isAuthenticated = false;
     this.state.currentRole = 'PATIENT';
     this.state.activeTab = 'pharmacy';
-    this.showToast('Session Ended', 'Logged out of restricted hospital inventory portal.', 'info');
+    this.showToast('Session Ended', 'Logged out of restricted administration portals.', 'info');
     this.save();
   }
 
@@ -188,6 +209,46 @@ class Store {
     this.save();
   }
 
+  // --- MEDICAL SHOP / PHARMACY ADMIN METHODS ---
+  setActivePharmacyAdminShop(facilityId) {
+    const facility = this.state.facilities.find(f => f.id === facilityId && f.type === 'PHARMACY');
+    if (!facility) return false;
+    this.state.pharmacyAdminSession.activePharmacyId = facilityId;
+    this.state.pharmacyAdminSession.pharmacist = facility.pharmacistInCharge || 'Chief Pharmacist';
+    this.showToast('Shop Switched', `Active management profile set to ${facility.name}.`, 'info');
+    this.save();
+    return true;
+  }
+
+  updatePharmacyProfile(facilityId, profileData) {
+    const facility = this.state.facilities.find(f => f.id === facilityId && f.type === 'PHARMACY');
+    if (!facility) return false;
+    Object.assign(facility, profileData);
+    this.showToast('Profile Updated', `License and profile details updated for ${facility.name}.`, 'success');
+    this.save();
+    return true;
+  }
+
+  updateReservationStatus(reservationId, newStatus) {
+    if (!this.state.reservations) this.state.reservations = [];
+    const res = this.state.reservations.find(r => r.id === reservationId);
+    if (!res) return false;
+    res.status = newStatus;
+    if (newStatus === 'CANCELLED') {
+      const med = this.state.medicines.find(m => m.id === res.medicineId);
+      if (med) {
+        med.quantity += 1;
+        if (med.stockStatus === 'OUT_OF_STOCK') med.stockStatus = 'LOW_STOCK';
+      }
+      this.showToast('Hold Released', `Reservation ${res.reservationRef} released. Unit restocked into inventory.`, 'info');
+    } else if (newStatus === 'DISPENSED') {
+      res.expiresAt = 'Fulfilled & Dispensed';
+      this.showToast('Order Dispensed', `Reservation ${res.reservationRef} marked as fulfilled & dispensed.`, 'success');
+    }
+    this.save();
+    return true;
+  }
+
   // --- MODULE A: PHARMACY FINDER & STOCK ---
   searchMedicines(query = '', categoryFilter = 'ALL', stockOnly = false) {
     const q = query.trim().toLowerCase();
@@ -205,7 +266,7 @@ class Store {
     });
   }
 
-  reserveMedicine(medicineId, patientDetails) {
+  reserveMedicine(medicineId, patientDetails = {}) {
     const med = this.state.medicines.find(m => m.id === medicineId);
     if (!med || med.stockStatus === 'OUT_OF_STOCK' || med.quantity <= 0) {
       this.showToast('Item Unavailable', 'This medicine is currently out of stock at this chemist.', 'danger');
@@ -220,6 +281,27 @@ class Store {
     }
 
     const reservationRef = 'MED-RES-' + Math.floor(100000 + Math.random() * 900000);
+    const newReservation = {
+      id: 'res-' + Math.random().toString(36).substring(2, 9),
+      reservationRef,
+      medicineId: med.id,
+      medicineName: med.name,
+      dosage: med.dosage,
+      form: med.form,
+      facilityId: med.facilityId,
+      facilityName: med.facilityName,
+      price: med.price,
+      patientName: patientDetails.patientName || 'Walk-in Patient',
+      patientPhone: patientDetails.patientPhone || '+91 98450 00000',
+      patientEmail: patientDetails.patientEmail || '',
+      reservedAt: 'Just now',
+      expiresAt: '4 Hours (Hold Active)',
+      status: 'ACTIVE_HOLD'
+    };
+
+    if (!this.state.reservations) this.state.reservations = [];
+    this.state.reservations.unshift(newReservation);
+
     this.save();
     this.showToast('Stock Reserved!', `Reservation ${reservationRef} confirmed at ${med.facilityName}. Valid for 4 hours.`, 'success');
     return reservationRef;
@@ -366,11 +448,13 @@ class Store {
     this.showToast('Inventory Updated', `Stock parameters updated for ${med.name}.`, 'info');
   }
 
-  addNewMedicine(medData) {
+  addNewMedicine(medData, targetFacilityId = null) {
+    const facilityId = targetFacilityId || this.state.pharmacyAdminSession?.activePharmacyId || 'fac-pharm-01';
+    const facility = this.state.facilities.find(f => f.id === facilityId) || { name: 'Apollo 24x7 Super Care Chemist' };
     const newMed = {
       id: 'med-' + Math.random().toString(36).substring(2, 9),
-      facilityId: 'fac-pharm-01',
-      facilityName: 'Apollo 24x7 Super Care Chemist',
+      facilityId: facilityId,
+      facilityName: facility.name,
       name: medData.name,
       genericName: medData.genericName,
       dosage: medData.dosage,
@@ -379,13 +463,13 @@ class Store {
       price: Number(medData.price),
       stockStatus: Number(medData.quantity) > 0 ? 'IN_STOCK' : 'OUT_OF_STOCK',
       quantity: Number(medData.quantity),
-      batchNo: 'BAT-' + Math.floor(1000 + Math.random() * 9000),
+      batchNo: medData.batchNo || ('BAT-' + Math.floor(1000 + Math.random() * 9000)),
       expiryDate: medData.expiryDate || '2027-12-31',
       prescriptionRequired: Boolean(medData.prescriptionRequired)
     };
     this.state.medicines.unshift(newMed);
     this.save();
-    this.showToast('Medicine Listed', `${newMed.name} added to pharmacy inventory.`, 'success');
+    this.showToast('Medicine Listed', `${newMed.name} added to ${facility.name} inventory.`, 'success');
   }
 
   updateBloodUnitCount(inventoryId, delta) {

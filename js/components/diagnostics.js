@@ -65,7 +65,7 @@ export function renderDiagnosticsModule(container) {
                   <span class="test-code-badge">${test.category} &bull; Code: ${test.code}</span>
                 </div>
                 <div style="text-align: right;">
-                  <span style="font-size: 1.25rem; font-weight: 800; color: var(--primary-900);">$${test.price.toFixed(2)}</span>
+                  <span style="font-size: 1.25rem; font-weight: 800; color: var(--primary-900);">₹${test.price.toFixed(2)}</span>
                   <span style="display: block; font-size: 0.725rem; color: var(--slate-500);">Digital Report</span>
                 </div>
               </div>
@@ -105,7 +105,7 @@ export function renderDiagnosticsModule(container) {
                 Preparation: ${selectedTest.preparation}
               </p>
             </div>
-            <strong style="font-size: 1.1rem; color: var(--primary-900);">$${selectedTest.price.toFixed(2)}</strong>
+            <strong style="font-size: 1.1rem; color: var(--primary-900);">₹${selectedTest.price.toFixed(2)}</strong>
           </div>
         </div>
 

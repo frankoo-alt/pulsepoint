@@ -10,6 +10,7 @@ import { renderDiagnosticsModule } from './components/diagnostics.js';
 import { renderBloodPublicModule } from './components/bloodPublic.js';
 import { renderDonorPortalModule } from './components/donorPortal.js';
 import { renderHospitalAdminModule } from './components/hospitalAdmin.js';
+import { renderPharmacyAdminModule } from './components/pharmacyAdmin.js';
 
 export function initApp() {
   const navContainer = document.getElementById('navbarContainer');
@@ -40,6 +41,9 @@ export function initApp() {
           break;
         case 'hospital-admin':
           renderHospitalAdminModule(mainView);
+          break;
+        case 'pharmacy-admin':
+          renderPharmacyAdminModule(mainView);
           break;
         default:
           renderPharmacyModule(mainView);

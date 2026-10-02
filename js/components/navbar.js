@@ -61,6 +61,11 @@ export function renderNavbar(container) {
             Voluntary Donor Hub
           </button>
 
+          <button class="nav-tab-btn tab-pharm-admin ${state.activeTab === 'pharmacy-admin' ? 'active' : ''}" data-tab="pharmacy-admin">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
+            Medical Shop Admin
+          </button>
+
           <button class="nav-tab-btn tab-restricted ${state.activeTab === 'hospital-admin' ? 'active' : ''}" data-tab="hospital-admin">
             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             Hospital Admin (Restricted)
@@ -74,6 +79,7 @@ export function renderNavbar(container) {
             <select class="role-select-dropdown" id="roleSwitcherSelect" aria-label="Switch User Role">
               <option value="PATIENT" ${state.currentRole === 'PATIENT' ? 'selected' : ''}>👤 Public Patient</option>
               <option value="DONOR" ${state.currentRole === 'DONOR' ? 'selected' : ''}>🩸 Voluntary Donor</option>
+              <option value="PHARMACY_ADMIN" ${state.currentRole === 'PHARMACY_ADMIN' ? 'selected' : ''}>💊 Medical Shop Admin</option>
               <option value="HOSPITAL_ADMIN" ${state.currentRole === 'HOSPITAL_ADMIN' ? 'selected' : ''}>🏥 Verified Hospital Admin</option>
             </select>
           </div>
@@ -135,6 +141,10 @@ function setupNavbarEvents() {
       const target = tab.dataset.tab;
       if (target === 'hospital-admin' && store.state.currentRole !== 'HOSPITAL_ADMIN') {
         authModal.showModal();
+        return;
+      }
+      if (target === 'pharmacy-admin' && store.state.currentRole !== 'PHARMACY_ADMIN') {
+        store.setRole('PHARMACY_ADMIN');
         return;
       }
       store.setActiveTab(target);

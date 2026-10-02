@@ -33,12 +33,12 @@ VALUES
 -- 3. DIAGNOSTIC TESTS
 INSERT INTO diagnostic_tests (id, test_code, name, category, description, fasting_hours, preparation_instructions, turnaround_hours, sample_type, standard_price_cents)
 VALUES
-('test-01', 'CBP-01', 'Comprehensive Metabolic & Blood Panel (CMP)', 'Pathology', 'Complete blood count, kidney function, liver enzymes, electrolytes, and blood glucose index.', 10, 'Strict overnight 10-hour water-only fasting recommended prior to draw.', 6, 'Venous Blood', 4500),
-('test-02', 'CXR-02', 'High-Resolution Digital Chest X-Ray (PA View)', 'Radiology', 'Evaluation of lungs, mediastinum, pleura, and cardiac silhouette.', 0, 'No fasting required. Wear metal-free comfortable clothing.', 2, 'Radiographic Imaging', 3800),
-('test-03', 'LIP-03', 'Advanced Lipid & Cardiovascular Profile', 'Biochemistry', 'Total cholesterol, HDL, LDL, VLDL, and Triglycerides with risk stratification.', 12, '12-hour complete fasting. Avoid alcohol 24h prior.', 4, 'Venous Blood', 2900),
-('test-04', 'HBA1C-04', 'Glycated Hemoglobin (HbA1c) Diabetic Monitor', 'Pathology', 'Assesses average 3-month blood sugar control for diabetes management.', 0, 'No fasting required. Can be done anytime during operating hours.', 3, 'Venous Blood', 2200),
-('test-05', 'THY-05', 'Thyroid Function Ultra-Profile (T3, T4, TSH)', 'Biochemistry', 'Evaluates primary, secondary, and subclinical thyroid disorders.', 0, 'Early morning sample preferred. Take thyroid medications after blood collection.', 8, 'Venous Blood', 3400),
-('test-06', 'USG-06', 'Ultrasound Whole Abdomen & Pelvis Screening', 'Radiology', 'High-frequency sonography of liver, gallbladder, kidneys, spleen, and bladder.', 6, '6-hour fasting before test. Drink 1L water 45 mins prior to retain full bladder.', 1, 'Ultrasound Imaging', 5500);
+('test-01', 'CBP-01', 'Comprehensive Metabolic & Blood Panel (CMP)', 'Pathology', 'Complete blood count, kidney function, liver enzymes, electrolytes, and blood glucose index.', 10, 'Strict overnight 10-hour water-only fasting recommended prior to draw.', 6, 'Venous Blood', 85000),
+('test-02', 'CXR-02', 'High-Resolution Digital Chest X-Ray (PA View)', 'Radiology', 'Evaluation of lungs, mediastinum, pleura, and cardiac silhouette.', 0, 'No fasting required. Wear metal-free comfortable clothing.', 2, 'Radiographic Imaging', 65000),
+('test-03', 'LIP-03', 'Advanced Lipid & Cardiovascular Profile', 'Biochemistry', 'Total cholesterol, HDL, LDL, VLDL, and Triglycerides with risk stratification.', 12, '12-hour complete fasting. Avoid alcohol 24h prior.', 4, 'Venous Blood', 55000),
+('test-04', 'HBA1C-04', 'Glycated Hemoglobin (HbA1c) Diabetic Monitor', 'Pathology', 'Assesses average 3-month blood sugar control for diabetes management.', 0, 'No fasting required. Can be done anytime during operating hours.', 3, 'Venous Blood', 45000),
+('test-05', 'THY-05', 'Thyroid Function Ultra-Profile (T3, T4, TSH)', 'Biochemistry', 'Evaluates primary, secondary, and subclinical thyroid disorders.', 0, 'Early morning sample preferred. Take thyroid medications after blood collection.', 8, 'Venous Blood', 60000),
+('test-06', 'USG-06', 'Ultrasound Whole Abdomen & Pelvis Screening', 'Radiology', 'High-frequency sonography of liver, gallbladder, kidneys, spleen, and bladder.', 6, '6-hour fasting before test. Drink 1L water 45 mins prior to retain full bladder.', 1, 'Ultrasound Imaging', 120000);
 
 -- 4. LAB SLOTS
 INSERT INTO lab_slots (id, facility_id, test_id, slot_date, time_window, time_period, max_capacity, booked_count)

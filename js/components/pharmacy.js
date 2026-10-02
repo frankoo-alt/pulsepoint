@@ -104,7 +104,7 @@ export function renderPharmacyModule(container) {
 
               <div class="medicine-pricing-row">
                 <div class="price-tag">
-                  $${med.price.toFixed(2)}
+                  ₹${med.price.toFixed(2)}
                   <small>/ pack</small>
                 </div>
                 <button 
@@ -153,7 +153,7 @@ export function renderPharmacyModule(container) {
               <th>Generic</th>
               <th>Chemist</th>
               <th>Stock Status</th>
-              <th>Price</th>
+              <th>Price (₹)</th>
             </tr>
           </thead>
           <tbody>
@@ -163,7 +163,7 @@ export function renderPharmacyModule(container) {
                 <td><small>${m.genericName}</small></td>
                 <td>${m.facilityName}</td>
                 <td><span class="badge ${m.stockStatus === 'IN_STOCK' ? 'badge-success' : (m.stockStatus === 'LOW_STOCK' ? 'badge-warning' : 'badge-danger')}">${m.stockStatus.replace('_', ' ')}</span></td>
-                <td style="font-weight: 700; color: var(--primary-900);">$${m.price.toFixed(2)}</td>
+                <td style="font-weight: 700; color: var(--primary-900);">₹${m.price.toFixed(2)}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -227,17 +227,17 @@ function setupPharmacyEvents(container) {
         <div style="background: var(--slate-50); border: 1px solid var(--slate-200); padding: 14px; border-radius: var(--radius-md); margin-bottom: 16px;">
           <h4 style="font-size: 1rem; color: var(--slate-900); font-weight: 700;">${activeMedToReserve.name} (${activeMedToReserve.dosage})</h4>
           <p style="font-size: 0.825rem; color: var(--slate-600); margin-top: 4px;">Dispensary: <strong>${activeMedToReserve.facilityName}</strong></p>
-          <p style="font-size: 0.825rem; color: var(--slate-600);">Price: <strong>$${activeMedToReserve.price.toFixed(2)}</strong></p>
+          <p style="font-size: 0.825rem; color: var(--slate-600);">Price: <strong>₹${activeMedToReserve.price.toFixed(2)}</strong></p>
         </div>
 
         <div class="form-group" style="margin-bottom: 12px;">
           <label class="form-label" for="resPatientName">Patient Full Name</label>
-          <input type="text" id="resPatientName" class="form-input" placeholder="e.g. Jane Doe" value="Jane Doe" required />
+          <input type="text" id="resPatientName" class="form-input" placeholder="e.g. Rajesh Kumar" value="Rajesh Kumar" required />
         </div>
 
         <div class="form-group" style="margin-bottom: 12px;">
           <label class="form-label" for="resPatientPhone">Mobile Phone for SMS Confirmation</label>
-          <input type="tel" id="resPatientPhone" class="form-input" placeholder="+1 (555) 000-0000" value="+1 (555) 019-8833" required />
+          <input type="tel" id="resPatientPhone" class="form-input" placeholder="+91 98450 00000" value="+91 98451 90812" required />
         </div>
 
         <p style="font-size: 0.775rem; color: var(--slate-500);">
@@ -252,7 +252,9 @@ function setupPharmacyEvents(container) {
   if (confirmReserveModalBtn) {
     confirmReserveModalBtn.addEventListener('click', () => {
       if (activeMedToReserve) {
-        store.reserveMedicine(activeMedToReserve.id, {});
+        const patientName = reserveModalBody.querySelector('#resPatientName')?.value.trim() || 'Rajesh Kumar';
+        const patientPhone = reserveModalBody.querySelector('#resPatientPhone')?.value.trim() || '+91 98451 90812';
+        store.reserveMedicine(activeMedToReserve.id, { patientName, patientPhone });
         reserveModal.close();
         renderPharmacyModule(container);
       }
