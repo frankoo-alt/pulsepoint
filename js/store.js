@@ -48,7 +48,7 @@ class Store {
           currentDonorProfile: parsed.currentDonorProfile || null,
           adminSession: parsed.adminSession || { isAuthenticated: false, hospital: 'fac-hosp-01', officer: 'Dr. Sarah Lin' },
           pharmacyAdminSession: parsed.pharmacyAdminSession || {
-            isAuthenticated: true,
+            isAuthenticated: false,
             activePharmacyId: 'fac-pharm-01',
             pharmacist: 'R. Sharma, B.Pharm'
           },
@@ -107,7 +107,7 @@ class Store {
         officer: 'Dr. Sarah Lin (Chief Hematology, Lic #MED-8812)'
       },
       pharmacyAdminSession: {
-        isAuthenticated: true,
+        isAuthenticated: false,
         activePharmacyId: 'fac-pharm-01',
         pharmacist: 'R. Sharma, B.Pharm'
       },
@@ -164,9 +164,14 @@ class Store {
       this.showToast('Security Cleared', 'Logged in as St. Jude Verified Medical Officer. Private facilities unmasked.', 'success');
     }
 
-    if (role === 'PHARMACY_ADMIN') {
+    if (role === 'PHARMACY_ADMIN' && !this.state.pharmacyAdminSession.isAuthenticated) {
+      if (passkey !== PHARMACY_PASSKEY) {
+        this.showToast('Pharmacist Clearance Denied', 'Invalid Drug License token. State pharmacy authorization required.', 'danger');
+        return false;
+      }
+      this.state.pharmacyAdminSession.isAuthenticated = true;
       const activeShop = this.state.facilities.find(f => f.id === this.state.pharmacyAdminSession.activePharmacyId);
-      this.showToast('Chemist Mode Active', `Logged in as Medical Shop Admin (${activeShop ? activeShop.name : 'Licensed Dispensary'}).`, 'success');
+      this.showToast('License Cleared', `Pharmacist credentials verified for ${activeShop ? activeShop.name : 'Medical Shop'}.`, 'success');
     }
 
     this.state.currentRole = role;
@@ -188,13 +193,25 @@ class Store {
     this.state.adminSession.isAuthenticated = false;
     this.state.currentRole = 'PATIENT';
     this.state.activeTab = 'pharmacy';
-    this.showToast('Session Ended', 'Logged out of restricted administration portals.', 'info');
+    this.showToast('Session Ended', 'Logged out of restricted hospital inventory portal.', 'info');
+    this.save();
+  }
+
+  logoutPharmacyAdmin() {
+    this.state.pharmacyAdminSession.isAuthenticated = false;
+    this.state.currentRole = 'PATIENT';
+    this.state.activeTab = 'pharmacy';
+    this.showToast('Session Ended', 'Logged out of Medical Shop Admin portal. Controls locked.', 'info');
     this.save();
   }
 
   setActiveTab(tab) {
-    if (tab === 'hospital-admin' && this.state.currentRole !== 'HOSPITAL_ADMIN') {
+    if (tab === 'hospital-admin' && (!this.state.adminSession.isAuthenticated || this.state.currentRole !== 'HOSPITAL_ADMIN')) {
       this.showToast('Restricted Access', 'Hospital Admin portal requires verified credentials and medical passkey.', 'warning');
+      return false;
+    }
+    if (tab === 'pharmacy-admin' && (!this.state.pharmacyAdminSession.isAuthenticated || this.state.currentRole !== 'PHARMACY_ADMIN')) {
+      this.showToast('Restricted Access', 'Medical Shop Admin portal requires Drug License authentication.', 'warning');
       return false;
     }
     this.state.activeTab = tab;

@@ -52,8 +52,10 @@
 * **Problem 4**: Chain-of-custody gaps during inter-hospital courier transport.
 
 ### Slide 3: Multi-Tenant RBAC & Privacy Separation
-* **Public Patient**: Zero-friction lookup, price comparison, 4-hour holds, diagnostic appointments.
+* **Public Patient**: Zero-friction lookup, price comparison in ₹, 4-hour holds, diagnostic appointments.
 * **Voluntary Donor**: Clinical eligibility verification (Age 18–65, $\ge$50kg), Holographic ID, trauma alert dispatch.
+* **Verified Medical Shop Admin**: Drug License passkey authentication (`PHARM-AUTH-4421`), 4-hour hold pickup queue processing, live ₹ pricing & stock adjustments, statutory license verification.
+  * **Explicit Restrictions**: Strictly sandboxed to own dispensary; barred from viewing or editing other shops' inventory; zero blood bank authority; zero inter-facility logistics clearance; total redaction of donor PII.
 * **Verified Hospital Admin**: Medical passkey access (`MED-AUTH-9082`), cold-chain freezer codes, transfer logistics stepper.
 
 ### Slide 4: Pharmacy Stock Finder & Comparative Pricing

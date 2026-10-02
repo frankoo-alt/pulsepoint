@@ -4,7 +4,7 @@
  * live medicine inventory, retail pricing in Rupees (₹), and incoming 4-hour patient hold reservations.
  */
 
-import { store } from '../store.js';
+import { store, PHARMACY_PASSKEY } from '../store.js';
 
 let activeAdminSubtab = 'holds'; // 'holds' | 'inventory' | 'profile'
 let inventorySearchQuery = '';
@@ -13,6 +13,79 @@ let reservationStatusFilter = 'ALL';
 
 export function renderPharmacyAdminModule(container) {
   const state = store.state;
+  const isAuth = state.pharmacyAdminSession.isAuthenticated && state.currentRole === 'PHARMACY_ADMIN';
+
+  // If not authenticated, render Pharmacist Security Verification Lock Screen
+  if (!isAuth) {
+    container.innerHTML = `
+      <div class="admin-lock-prompt">
+        <div class="admin-lock-icon" style="background: rgba(13, 148, 136, 0.1); color: var(--teal-600); border: 1px solid rgba(13, 148, 136, 0.25);">🔒</div>
+        <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--slate-900); margin-bottom: 8px;">
+          Restricted Medical Shop Administration
+        </h2>
+        <p style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.5; margin-bottom: 20px;">
+          Access to dispensary inventory modification, Schedule H prescription controls, retail pricing (₹), and customer 4-hour pickup hold records requires verified pharmacist credentials under State Pharmacy Council regulations.
+        </p>
+
+        <!-- Statutory Restrictions Summary Card -->
+        <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 14px; text-align: left; margin-bottom: 20px; font-size: 0.8rem;">
+          <strong style="color: var(--slate-800); display: block; margin-bottom: 6px;">🛡️ Enforced Regulatory Restrictions:</strong>
+          <ul style="padding-left: 18px; color: var(--slate-600); display: flex; flex-direction: column; gap: 4px; margin: 0;">
+            <li><strong>Dispensary Scoping:</strong> Access restricted solely to your assigned medical shop inventory.</li>
+            <li><strong>No Blood Bank Access:</strong> Hospital cold-chain cryo-storage racks are strictly barred.</li>
+            <li><strong>Audit Trail:</strong> All stock adjustments, pricing changes, and dispensations are cryptographically logged.</li>
+          </ul>
+        </div>
+
+        <form id="pharmLockForm" style="display: flex; flex-direction: column; gap: 14px; text-align: left;">
+          <div class="form-group">
+            <label class="form-label" for="pharmLockKeyInput">Pharmacist License Token / Admin Key</label>
+            <input 
+              type="password" 
+              id="pharmLockKeyInput" 
+              class="form-input" 
+              placeholder="Enter key e.g., PHARM-AUTH-4421" 
+              required 
+            />
+          </div>
+
+          <div class="demo-passkey-hint" style="text-align: center;">
+            <span>Hackathon Testing Key:</span>
+            <button type="button" class="demo-passkey-btn" id="pharmLockAutofillBtn">
+              Autofill: ${PHARMACY_PASSKEY}
+            </button>
+          </div>
+
+          <button type="submit" class="btn-primary" style="margin-top: 8px;">
+            Verify Pharmacist Credentials & Unlock &rarr;
+          </button>
+        </form>
+      </div>
+    `;
+
+    const lockForm = container.querySelector('#pharmLockForm');
+    const keyInput = container.querySelector('#pharmLockKeyInput');
+    const autofillBtn = container.querySelector('#pharmLockAutofillBtn');
+
+    if (autofillBtn && keyInput) {
+      autofillBtn.addEventListener('click', () => {
+        keyInput.value = PHARMACY_PASSKEY;
+      });
+    }
+
+    if (lockForm) {
+      lockForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const passkey = keyInput.value.trim();
+        const success = store.setRole('PHARMACY_ADMIN', passkey);
+        if (success) {
+          renderPharmacyAdminModule(container);
+        }
+      });
+    }
+    return;
+  }
+
   const activePharmacyId = state.pharmacyAdminSession.activePharmacyId || 'fac-pharm-01';
   
   // Find current pharmacy facility
@@ -87,6 +160,10 @@ export function renderPharmacyAdminModule(container) {
 
           <button class="btn-outline btn-sm" id="openEditProfileBtn" title="Update dispensary credentials & license">
             ✏️ Edit Shop Profile
+          </button>
+
+          <button class="btn-outline btn-sm" id="logoutChemistBtn" style="color: var(--danger-600); border-color: var(--danger-300);" title="End session and lock portal">
+            🔒 Log Out Chemist
           </button>
         </div>
       </div>
@@ -429,6 +506,66 @@ export function renderPharmacyAdminModule(container) {
             </div>
 
           </div>
+
+          <!-- Statutory Role Restrictions & Boundary Enforcement -->
+          <div style="margin-top: 24px; padding: 20px; border-radius: var(--radius-md); background: rgba(239, 68, 68, 0.04); border: 1px solid rgba(239, 68, 68, 0.2);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.4rem;">🛡️</span>
+                <div>
+                  <h4 style="font-size: 1rem; font-weight: 800; color: var(--slate-900); margin: 0;">
+                    Statutory Role Restrictions & Compliance Boundaries
+                  </h4>
+                  <p style="font-size: 0.775rem; color: var(--slate-500); margin: 0;">
+                    Strictly enforced in compliance with CDSCO Drug Rules, HIPAA Security Rule, and GDPR Data Minimization.
+                  </p>
+                </div>
+              </div>
+              <span class="badge badge-danger" style="font-size: 0.75rem;">ROLE: PHARMACY_ADMIN</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
+              <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200);">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                  <span style="color: var(--danger-600); font-weight: 800;">🚫</span>
+                  <strong style="font-size: 0.85rem; color: var(--slate-800);">Zero Blood Bank Authority</strong>
+                </div>
+                <p style="font-size: 0.775rem; color: var(--slate-600); line-height: 1.4; margin: 0;">
+                  Medical Shop Admins are strictly barred from viewing hospital cold-chain blood racks, modifying erythrocyte/platelet reserve units, or reading infectious disease screening assays.
+                </p>
+              </div>
+
+              <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200);">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                  <span style="color: var(--danger-600); font-weight: 800;">🚫</span>
+                  <strong style="font-size: 0.85rem; color: var(--slate-800);">Zero Inter-Facility Logistics</strong>
+                </div>
+                <p style="font-size: 0.775rem; color: var(--slate-600); line-height: 1.4; margin: 0;">
+                  Cannot authorize blue-light emergency blood transfers between hospital trauma units or generate inter-facility cryptographic transit manifest tokens (<code>PP-TX-...</code>).
+                </p>
+              </div>
+
+              <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200);">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                  <span style="color: var(--danger-600); font-weight: 800;">🚫</span>
+                  <strong style="font-size: 0.85rem; color: var(--slate-800);">Donor PII Redaction</strong>
+                </div>
+                <p style="font-size: 0.775rem; color: var(--slate-600); line-height: 1.4; margin: 0;">
+                  Strict prohibition from accessing voluntary blood donor registries, donor contact info, medical histories, or antibody screening results.
+                </p>
+              </div>
+
+              <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200);">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                  <span style="color: var(--primary-700); font-weight: 800;">🔒</span>
+                  <strong style="font-size: 0.85rem; color: var(--slate-800);">Isolated Dispensary Scope</strong>
+                </div>
+                <p style="font-size: 0.775rem; color: var(--slate-600); line-height: 1.4; margin: 0;">
+                  Chemist controls, inventory modifications, and retail pricing in ₹ are strictly sandboxed to the authenticated dispensary. Modifying competitor inventory is blocked.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       ` : ''}
 
@@ -677,6 +814,15 @@ function setupPharmacyAdminEvents(container, currentPharmacy) {
       store.updateMedicineStock(medId, delta);
     });
   });
+
+  // 9b. Logout Chemist Admin
+  const logoutChemistBtn = container.querySelector('#logoutChemistBtn');
+  if (logoutChemistBtn) {
+    logoutChemistBtn.addEventListener('click', () => {
+      store.logoutPharmacyAdmin();
+      renderPharmacyAdminModule(container);
+    });
+  }
 
   // 10. Edit Shop Profile Modal
   const editProfileModal = container.querySelector('#editShopProfileModal');

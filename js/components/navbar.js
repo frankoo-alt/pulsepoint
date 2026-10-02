@@ -3,7 +3,7 @@
  * Navigation tabs, role switcher, emergency ticker, and verified admin modal
  */
 
-import { store, ADMIN_PASSKEY } from '../store.js';
+import { store, ADMIN_PASSKEY, PHARMACY_PASSKEY } from '../store.js';
 
 export function renderNavbar(container) {
   const state = store.state;
@@ -91,7 +91,7 @@ export function renderNavbar(container) {
       </div>
     </header>
 
-    <!-- Admin Authentication Security Modal -->
+    <!-- Hospital Admin Authentication Security Modal -->
     <dialog id="adminAuthModal">
       <div class="modal-header">
         <h3>🔒 Verified Hospital Security Clearance</h3>
@@ -117,6 +117,33 @@ export function renderNavbar(container) {
         <button class="btn-primary btn-sm" id="verifyAuthModalBtn">Unlock Restricted Portal</button>
       </div>
     </dialog>
+
+    <!-- Medical Shop Admin Security Modal -->
+    <dialog id="pharmacyAuthModal">
+      <div class="modal-header">
+        <h3>🔒 Certified Pharmacist Drug License Clearance</h3>
+        <button class="modal-close-btn" id="closePharmAuthModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.875rem; color: var(--slate-600); margin-bottom: 16px;">
+          This restricted dispensary environment allows modifying medicine inventory, retail pricing, and customer 4-hour pickup hold records. Authorized state pharmacy credentials required.
+        </p>
+        
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label" for="pharmacyKeyInput">Pharmacist License Token / Admin Key</label>
+          <input type="password" id="pharmacyKeyInput" class="form-input" placeholder="Enter key e.g., PHARM-AUTH-4421" />
+        </div>
+
+        <div class="demo-passkey-hint">
+          <strong>Hackathon Testing Key:</strong>
+          <button type="button" class="demo-passkey-btn" id="autofillPharmPasskeyBtn">Autofill: ${PHARMACY_PASSKEY}</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline btn-sm" id="cancelPharmAuthModalBtn">Cancel</button>
+        <button class="btn-primary btn-sm" id="verifyPharmAuthModalBtn">Unlock Dispensary Portal</button>
+      </div>
+    </dialog>
   `;
 
   // Attach event handlers
@@ -132,6 +159,15 @@ function setupNavbarEvents() {
   const verifyAuthModalBtn = document.getElementById('verifyAuthModalBtn');
   const closeAuthModalBtn = document.getElementById('closeAuthModalBtn');
   const cancelAuthModalBtn = document.getElementById('cancelAuthModalBtn');
+
+  // Pharmacy Auth Modal elements
+  const pharmAuthModal = document.getElementById('pharmacyAuthModal');
+  const pharmacyKeyInput = document.getElementById('pharmacyKeyInput');
+  const autofillPharmPasskeyBtn = document.getElementById('autofillPharmPasskeyBtn');
+  const verifyPharmAuthModalBtn = document.getElementById('verifyPharmAuthModalBtn');
+  const closePharmAuthModalBtn = document.getElementById('closePharmAuthModalBtn');
+  const cancelPharmAuthModalBtn = document.getElementById('cancelPharmAuthModalBtn');
+
   const tickerRespondBtn = document.getElementById('tickerRespondBtn');
   const resetDemoBtn = document.getElementById('resetDemoBtn');
   const brandLogoBtn = document.getElementById('brandLogoBtn');
@@ -139,12 +175,12 @@ function setupNavbarEvents() {
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const target = tab.dataset.tab;
-      if (target === 'hospital-admin' && store.state.currentRole !== 'HOSPITAL_ADMIN') {
+      if (target === 'hospital-admin' && !store.state.adminSession.isAuthenticated) {
         authModal.showModal();
         return;
       }
-      if (target === 'pharmacy-admin' && store.state.currentRole !== 'PHARMACY_ADMIN') {
-        store.setRole('PHARMACY_ADMIN');
+      if (target === 'pharmacy-admin' && !store.state.pharmacyAdminSession.isAuthenticated) {
+        pharmAuthModal.showModal();
         return;
       }
       store.setActiveTab(target);
@@ -163,6 +199,8 @@ function setupNavbarEvents() {
       const role = e.target.value;
       if (role === 'HOSPITAL_ADMIN' && !store.state.adminSession.isAuthenticated) {
         authModal.showModal();
+      } else if (role === 'PHARMACY_ADMIN' && !store.state.pharmacyAdminSession.isAuthenticated) {
+        pharmAuthModal.showModal();
       } else {
         store.setRole(role);
       }
@@ -194,6 +232,32 @@ function setupNavbarEvents() {
 
   if (closeAuthModalBtn) closeAuthModalBtn.addEventListener('click', closeDialog);
   if (cancelAuthModalBtn) cancelAuthModalBtn.addEventListener('click', closeDialog);
+
+  // Pharmacy Auth Event Handlers
+  if (autofillPharmPasskeyBtn && pharmacyKeyInput) {
+    autofillPharmPasskeyBtn.addEventListener('click', () => {
+      pharmacyKeyInput.value = PHARMACY_PASSKEY;
+    });
+  }
+
+  if (verifyPharmAuthModalBtn && pharmacyKeyInput) {
+    verifyPharmAuthModalBtn.addEventListener('click', () => {
+      const success = store.setRole('PHARMACY_ADMIN', pharmacyKeyInput.value.trim());
+      if (success) {
+        pharmAuthModal.close();
+      }
+    });
+  }
+
+  const closePharmDialog = () => {
+    if (pharmAuthModal && pharmAuthModal.open) pharmAuthModal.close();
+    if (roleSelect && store.state.currentRole !== 'PHARMACY_ADMIN') {
+      roleSelect.value = store.state.currentRole;
+    }
+  };
+
+  if (closePharmAuthModalBtn) closePharmAuthModalBtn.addEventListener('click', closePharmDialog);
+  if (cancelPharmAuthModalBtn) cancelPharmAuthModalBtn.addEventListener('click', closePharmDialog);
 
   if (tickerRespondBtn) {
     tickerRespondBtn.addEventListener('click', () => {
